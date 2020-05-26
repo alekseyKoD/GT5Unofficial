@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class GT_Runnable_MachineBlockUpdate implements Runnable {
     private final int mX, mY, mZ;
     private final World mWorld;
+    public static boolean isProcessingAllowed = true;
 
     public GT_Runnable_MachineBlockUpdate(World aWorld, int aX, int aY, int aZ) {
         mWorld = aWorld;

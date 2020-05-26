@@ -19,10 +19,14 @@ public class GT_Block_Casings8
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".0.name", "Chemically Inert Machine Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".1.name", "PTFE Pipe Casing");
         GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".2.name", "Robust HSS-G Machine Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".3.name", "Firebox HSS-G Machine Casing");
+        GT_LanguageManager.addStringLocalization(getUnlocalizedName() + ".4.name", "Pipe HSS-G Machine Casing");
 
         ItemList.Casing_Chemically_Inert.set(new ItemStack(this, 1, 0));
         ItemList.Casing_Pipe_Polytetrafluoroethylene.set(new ItemStack(this, 1, 1));
         ItemList.Casing_RobustHSSG.set(new ItemStack(this,1,2));
+        ItemList.Casing_Firebox_HSSG.set(new ItemStack(this,1,3));
+        ItemList.Casing_Pipe_HSSG.set(new ItemStack(this,1,4));
     }
     @Override
     @SideOnly(Side.CLIENT)
@@ -34,6 +38,11 @@ public class GT_Block_Casings8
                 return Textures.BlockIcons.MACHINE_CASING_PIPE_POLYTETRAFLUOROETHYLENE.getIcon();
             case 2:
                 return Textures.BlockIcons.MACHINE_CASING_ROBUST_HSSG.getIcon();
+            case 3:
+                return Textures.BlockIcons.MACHINE_CASING_FIREBOX_HSSG.getIcon();
+            case 4:
+                return Textures.BlockIcons.MACHINE_CASING_PIPE_HSSG.getIcon();
+            case 5:
         }
         return Textures.BlockIcons.MACHINE_CASING_ROBUST_TUNGSTENSTEEL.getIcon();
     }

@@ -7,6 +7,8 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Dynamo;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_MultiBlockBase;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.multiblock.GT_MultiBlockUtility;
+import gregtech.api.util.multiblock.GT_SimpleBlockChecker;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_MultiBlockBase {
 
@@ -24,11 +27,39 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
     protected int storedFluid = 0;
     protected int counter = 0;
 
+    public static String[][] mStructure = new String[][]{
+            {
+                "CCC",
+                "CCC",
+                "CCC",
+                "CCC",
+                "aaa"
+            },
+            {
+                "CDC",
+                "CaC",
+                "CaC",
+                "CcC",
+                "aaa"
+            },
+            {
+                "CCC",
+                "CCC",
+                "CCC",
+                "CCC",
+                "aaa"
+            }
+    };
+
     public GT_MetaTileEntity_LargeTurbine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
     public GT_MetaTileEntity_LargeTurbine(String aName) {
         super(aName);
+        mUtility = new GT_MultiBlockUtility(true,true, mStructure,new GT_SimpleBlockChecker[]{
+                new GT_SimpleBlockChecker('C',getCasingBlock(),getCasingMeta(),24, 1000, Arrays.asList(new Integer[]{1,2,7,8}),getCasingTextureIndex()),
+                new GT_SimpleBlockChecker('D',getCasingBlock(),getCasingMeta(),0,1,Arrays.asList(new Integer[]{6}), getCasingTextureIndex())
+        });
     }
 
     @Override
@@ -42,7 +73,8 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        byte tSide = getBaseMetaTileEntity().getBackFacing();
+        return mUtility.checkStructure(aBaseMetaTileEntity,this, aBaseMetaTileEntity.getBackFacing());
+       /* byte tSide = getBaseMetaTileEntity().getBackFacing();
         if ((getBaseMetaTileEntity().getAirAtSideAndDistance(getBaseMetaTileEntity().getBackFacing(), 1)) && (getBaseMetaTileEntity().getAirAtSideAndDistance(getBaseMetaTileEntity().getBackFacing(), 2))) {
             int tAirCount = 0;
             for (byte i = -1; i < 2; i = (byte) (i + 1)) {
@@ -101,6 +133,7 @@ public abstract class GT_MetaTileEntity_LargeTurbine extends GT_MetaTileEntity_M
             return false;
         }
         return true;
+        */
     }
 
     public abstract Block getCasingBlock();

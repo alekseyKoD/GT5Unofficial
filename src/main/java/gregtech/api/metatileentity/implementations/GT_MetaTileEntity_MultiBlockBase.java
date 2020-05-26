@@ -16,6 +16,8 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe.GT_Recipe_Map;
 import gregtech.api.util.GT_Utility;
+import gregtech.api.util.multiblock.GT_MultiBlockUtility;
+import gregtech.api.util.multiblock.IGuideRenderer;
 import gregtech.common.GT_Pollution;
 import gregtech.common.items.GT_MetaGenerated_Tool_01;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +40,7 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
     public String mNEI;
         public int damageFactorLow = 5;
     public float damageFactorHigh = 0.6f;
+    public GT_MultiBlockUtility mUtility;
 
     public ArrayList<GT_MetaTileEntity_Hatch_Input> mInputHatches = new ArrayList<GT_MetaTileEntity_Hatch_Input>();
     public ArrayList<GT_MetaTileEntity_Hatch_Output> mOutputHatches = new ArrayList<GT_MetaTileEntity_Hatch_Output>();
@@ -58,6 +61,21 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
 
     public GT_MetaTileEntity_MultiBlockBase(String aName) {
         super(aName, 2);
+        GT_MetaTileEntity_MultiBlockBase.disableMaintenance = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.disableMaintenance", false);
+        this.damageFactorLow = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.damageFactorLow", 5);
+        this.damageFactorHigh = (float) GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.damageFactorHigh", 0.6f);
+    }
+
+    public GT_MetaTileEntity_MultiBlockBase(int aID, String aName, String aNameRegional, int aSlotCount) {
+        super(aID, aName, aNameRegional, aSlotCount);
+        GT_MetaTileEntity_MultiBlockBase.disableMaintenance = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.disableMaintenance", false);
+        this.damageFactorLow = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.damageFactorLow", 5);
+        this.damageFactorHigh = (float) GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.damageFactorHigh", 0.6f);
+        this.mNEI = "";
+    }
+
+    public GT_MetaTileEntity_MultiBlockBase(String aName,int aSlotCount) {
+        super(aName, aSlotCount);
         GT_MetaTileEntity_MultiBlockBase.disableMaintenance = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.disableMaintenance", false);
         this.damageFactorLow = GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.damageFactorLow", 5);
         this.damageFactorHigh = (float) GregTech_API.sMachineFile.get(ConfigCategories.machineconfig, "MultiBlockMachines.damageFactorHigh", 0.6f);
@@ -883,6 +901,51 @@ public abstract class GT_MetaTileEntity_MultiBlockBase extends MetaTileEntity {
             return mOutputBusses.add((GT_MetaTileEntity_Hatch_OutputBus) aMetaTileEntity);
         }
         return false;
+    }
+
+    public byte addHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex){
+        if (aTileEntity == null) return -1;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return -1;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch) {
+            ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+        }
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Input  &&  mInputHatches.add((GT_MetaTileEntity_Hatch_Input) aMetaTileEntity))
+            return 1;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_InputBus  &&  mInputBusses.add((GT_MetaTileEntity_Hatch_InputBus) aMetaTileEntity))
+            return 2;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Output  &&  mOutputHatches.add((GT_MetaTileEntity_Hatch_Output) aMetaTileEntity))
+            return 3;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_OutputBus  && mOutputBusses.add((GT_MetaTileEntity_Hatch_OutputBus) aMetaTileEntity))
+            return 4;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Energy && mEnergyHatches.add((GT_MetaTileEntity_Hatch_Energy) aMetaTileEntity))
+            return 5;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Dynamo && mDynamoHatches.add((GT_MetaTileEntity_Hatch_Dynamo) aMetaTileEntity))
+            return 6;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Maintenance && mMaintenanceHatches.add((GT_MetaTileEntity_Hatch_Maintenance) aMetaTileEntity))
+            return 7;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Muffler &&  mMufflerHatches.add((GT_MetaTileEntity_Hatch_Muffler) aMetaTileEntity))
+            return 8;
+        return -1;
+    }
+
+    GT_MultiBlockUtility getUtility(){
+        return mUtility;
+    }
+
+    public boolean renderStructure(boolean aBuild, IGuideRenderer aRenderer, int[] aParams) {
+        //System.out.println("rendring");
+        if(aParams[0]>2)
+            return false;
+        GT_MultiBlockUtility u = getUtility();
+        if(u==null)
+            return false;
+        u.renderGuide(this.getBaseMetaTileEntity(),this, this.getBaseMetaTileEntity().getBackFacing(),aBuild, aRenderer);
+        return true;
+    }
+
+    public String[] getParamNames(){
+        return new String[]{" "," "," "};
     }
 
     @Override

@@ -136,4 +136,8 @@ public class GT_RenderedTexture implements ITexture, IColorModulationContainer {
     public boolean isValidTexture() {
         return mIconContainer != null;
     }
+
+    public IIconContainer getIconContainer(){
+        return mIconContainer;
+    }
 }
