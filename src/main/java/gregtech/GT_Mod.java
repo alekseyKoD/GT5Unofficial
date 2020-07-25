@@ -95,6 +95,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.GT = this;
         GT_Values.DW = new GT_DummyWorld();
         GT_Values.NW = new GT_Network();
+        GT_Values.S = new GT_ResearchCreator();
         GregTech_API.sRecipeAdder = GT_Values.RA = new GT_RecipeAdder();
 
         Textures.BlockIcons.VOID.name();
@@ -638,6 +639,7 @@ public class GT_Mod implements IGT_Mod {
         new GT_Worldgenloader().run();
         new GT_CoverLoader().run();
         new GT_AE2EnergyTunnelLoader().run();
+        new GT_ResearchStationRecipeLoader().run();
         LoadArmorComponents.init();
 
         GT_RecipeRegistrator.registerUsagesForMaterials(new ItemStack(Blocks.planks, 1), null, false);

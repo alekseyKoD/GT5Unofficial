@@ -665,7 +665,8 @@ public class GT_MetaGenerated_Item_01 extends GT_MetaGenerated_Item_X32 {
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataOrb.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataOrb.get(1L, new Object[0])});
         ItemList.Tool_DataStick.set(addItem(tLastID = 708, "Data Stick", "A Low Capacity Data Storage", new Object[]{SubTag.NO_UNIFICATION, new Behaviour_DataStick()}));
         GT_ModHandler.addShapelessCraftingRecipe(ItemList.Tool_DataStick.get(1L, new Object[0]), GT_ModHandler.RecipeBits.NOT_REMOVABLE, new Object[]{ItemList.Tool_DataStick.get(1L, new Object[0])});
-        
+        ItemList.Tool_DataCluster.set(addItem(709,"Data Cluster","a Ultra High Capacity Data Storage", new Object[]{SubTag.NO_UNIFICATION, new Behaviour_DataCluster()}));
+
         ItemList.Circuit_Board_Basic.set(addItem(tLastID = 710, "Coated Circuit Board", "A Basic Board", new Object[0])); ItemList.Circuit_Board_Coated.set(ItemList.Circuit_Board_Basic.get(1,new Object[0]));
         ItemList.Circuit_Board_Advanced.set(addItem(tLastID = 711, "Epoxy Circuit Board", "An Advanced Board", new Object[0])); ItemList.Circuit_Board_Epoxy.set(ItemList.Circuit_Board_Advanced.get(1,new Object[0]));
         ItemList.Circuit_Board_Elite.set(addItem(tLastID = 712, "Multilayer Fiber-Reinforced Circuit Board", "An Elite Board", new Object[0])); ItemList.Circuit_Board_Multifiberglass.set(ItemList.Circuit_Board_Elite.get(1,new Object[0]));

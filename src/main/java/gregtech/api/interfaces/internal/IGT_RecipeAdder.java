@@ -695,4 +695,12 @@ public interface IGT_RecipeAdder {
 	 */
 	public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes);
 
+   // public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID,ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe aTargetRecipe, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String[] aDescription, String[] aRecipePageText, int[] aRecipeCoords, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies);
+    public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID,ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe[] aTargetRecipe, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String aName, String[] aRecipePageText, int[] aRecipeCoords, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies);
+  //  public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID,ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe aTargetRecipe, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String[] aDescription, String aRecipePageText, int[] aRecipeCoords, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies);
+
+    public boolean addPrimitiveResearchStationRecipe(ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack aFluidInputPerIteration, GT_Recipe aTargetRecipe, int aMinIterationsCount, int aMaxIterationsCount);
+
+    public boolean addEngineersWorkstationRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aSpecial, ItemStack aOutput1, int aDuration);
+
 }

@@ -2,6 +2,7 @@ package gregtech.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import cpw.mods.fml.common.Loader;
@@ -24,6 +25,7 @@ import mods.railcraft.common.blocks.aesthetics.cube.EnumCube;
 import mods.railcraft.common.items.RailcraftToolItems;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -1171,5 +1173,91 @@ public class GT_RecipeAdder
 	public void setIsAddingDeprecatedRecipes(boolean isAddingDeprecatedRecipes) {
 		this.isAddingDeprecatedRecipes = isAddingDeprecatedRecipes;
 	}
+
+   /* @Override
+    public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID, ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe aTargetRecipe, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String[] aDescription, String aRecipePageText, int[] aRecipeCoords, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies) {
+	    ArrayList<String> desc = new ArrayList<>();
+        String[] ar = aRecipePageText.split(" ");
+        for(int i = 0; i < ar.length; i++){
+            String s = ar[i];
+            while ((i+1)<ar.length&&s.length()+ar[i+1].length()<27){
+                i++;
+                s+=" "+ar[i];
+            }
+            desc.add(s);
+
+        }
+
+	    return addElectricResearchStationRecipe(aID,aResearchItems,aSingleResearchTime,aInputsPerIteration,aFluidInputsPerIteration,aComputation,aEUt,aTargetRecipe,aMinIterationsCount,aMaxIterationsCount,aResearchPage,aDisplayStack,aDescription,desc.toArray(new String[desc.size()]),aRecipeCoords,aDependencies);
+    }
+
+    @Override//27
+    public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID,ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe aTargetRecipe, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String[] aDescription, String[] aRecipePageText, int[] aRecipeCoords, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies){
+        return addElectricResearchStationRecipe(aID,aResearchItems,aSingleResearchTime,aInputsPerIteration,aFluidInputsPerIteration,aComputation,aEUt,new GT_Recipe[]{aTargetRecipe},aMinIterationsCount,aMaxIterationsCount,aResearchPage,aDisplayStack,aDescription,aRecipePageText,aRecipeCoords,aDependencies);
+    }*/
+
+    @Override//27
+    public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID,ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe[] aTargetRecipes, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String aName, String[] aRecipePageText, int[] aRecipeCoords, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies){
+        ItemStack[] aInputs = new ItemStack[18];
+        for(int i = 0; i < aResearchItems.length;i++){
+            aInputs[14+i] = aResearchItems[i];
+        }
+        for(int i = 0; i < aInputsPerIteration.length;i++){
+            aInputs[i] = aInputsPerIteration[i];
+        }
+        ItemStack[] aOutputs = new ItemStack[1+aTargetRecipes.length];
+        NBTTagCompound aTag = new NBTTagCompound();
+    //    aTag.setTag("researchItemTag0",aTargetRecipe.mOutputs[0].writeToNBT(new NBTTagCompound()));
+        aTag.setInteger("capacitySize", 16);
+        aTag.setInteger("usedCapacity", aTargetRecipes.length);
+        aTag.setBoolean("isComputer",true);
+        aTag.setInteger("rID0",aID);
+        ItemStack aOrb = ItemList.Tool_DataCluster.get(1L);
+        aOrb.setTagCompound(aTag);
+        aOutputs[0] = aOrb;
+        for(int i = 1; i < aOutputs.length; i++) {
+            aOutputs[i] = aTargetRecipes[i-1].mOutputs[0];
+            aTargetRecipes[i-1].setResearchID(aID);
+            aTargetRecipes[i-1].mSpecialItems = aOrb;
+        }
+
+        GT_Recipe.GT_Recipe_Map.sResearchStationVisualRecipes.addFakeRecipe(false,aInputs,aOutputs,null,aFluidInputsPerIteration,null,aSingleResearchTime,aEUt,aComputation,false);
+        GT_Recipe.GT_Recipe_ResearchStation aRecipe = new GT_Recipe.GT_Recipe_ResearchStation(aID,aResearchItems,aSingleResearchTime,aInputsPerIteration,aFluidInputsPerIteration, aComputation, aEUt,aTargetRecipes,aMinIterationsCount,aMaxIterationsCount,new GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription(aDisplayStack,aResearchPage,aRecipeCoords[0], aRecipeCoords[1], new String[]{aName},aRecipePageText, aDependencies));
+        GT_Recipe.GT_Recipe_ResearchStation.addBaseRecipe(aRecipe);
+        return aRecipe.mDescription;
+    }
+
+    @Override
+    public boolean addPrimitiveResearchStationRecipe(ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack aFluidInputPerIteration, GT_Recipe aTargetRecipe, int aMinIterationsCount, int aMaxIterationsCount) {
+        ItemStack[] aInputs = new ItemStack[13];
+        for(int i = 0; i < aResearchItems.length;i++){
+            aInputs[9+i] = aResearchItems[i];
+        }
+        for(int i = 0; i < aInputsPerIteration.length;i++){
+            aInputs[i] = aInputsPerIteration[i];
+        }
+        ItemStack[] aOutputs = new ItemStack[2];
+        NBTTagCompound aTag = new NBTTagCompound();
+        aTag.setTag("researchItemTag0",aTargetRecipe.mOutputs[0].writeToNBT(new NBTTagCompound()));
+        aTag.setInteger("capacitySize", 16);
+        aTag.setInteger("usedCapacity", 1);
+        ItemStack aOrb = ItemList.EngineersBook.get(1L);
+        aOrb.setTagCompound(aTag);
+        aOutputs[0] = aOrb;
+        aOutputs[1] = aTargetRecipe.mOutputs[0];
+
+
+        GT_Recipe.GT_Recipe_Map.sPrimitiveResearchStationVisualRecipes.addFakeRecipe(false,aInputs,aOutputs,null,new FluidStack[]{aFluidInputPerIteration},null,aSingleResearchTime,0,0,false);
+        aTargetRecipe.mRequireResearch = true;
+        aTargetRecipe.mSpecialItems = aOrb;
+
+        // return GT_Recipe.GT_Recipe_ResearchStation.addPrimitiveRecipe(new GT_Recipe.GT_Recipe_ResearchStation(aResearchItems,aSingleResearchTime,aInputsPerIteration,new FluidStack[]{aFluidInputPerIteration}, 0, -1,aTargetRecipe,aMinIterationsCount,aMaxIterationsCount, new Object[0]));
+        return true;
+    }
+
+    @Override
+    public boolean addEngineersWorkstationRecipe(ItemStack[] aInputs, FluidStack aFluidInput, ItemStack aSpecial, ItemStack aOutput1, int aDuration) {
+        return GT_Recipe.GT_Recipe_Map.sEngineersWorkstationRecipes.addRecipe (false,aInputs,new ItemStack[]{aOutput1},null,new FluidStack[]{aFluidInput},null,aDuration,0,0)!=null;
+    }
 
 }

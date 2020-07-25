@@ -2089,4 +2089,12 @@ public class BaseMetaTileEntity extends BaseTileEntity implements IGregTechTileE
     	return slotIndex + indexShift;
     }
 
+    @Override
+    public void onAdjacentBlockChange(int aX, int aY, int aZ) {
+        super.onAdjacentBlockChange(aX, aY, aZ);
+        if (mMetaTileEntity!=null)
+            mMetaTileEntity.onAdjacentBlockChange(aX, aY, aZ);
+
+    }
+
 }

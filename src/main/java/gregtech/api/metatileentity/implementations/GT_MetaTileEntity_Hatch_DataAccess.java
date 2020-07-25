@@ -1,16 +1,30 @@
 package gregtech.api.metatileentity.implementations;
 
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.*;
+import gregtech.api.gui.GT_Container_2by2;
+import gregtech.api.gui.GT_Container_4by4;
+import gregtech.api.gui.GT_GUIContainer_2by2;
+import gregtech.api.gui.GT_GUIContainer_4by4;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.util.GT_Recipe;
+import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_ComputerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.HashSet;
 
 public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch {
+
+    public boolean isComputerPart = false;
+    public boolean needsUpdate = true;
+    public GT_MetaTileEntity_ComputerBase mComputer = null;
+
     public GT_MetaTileEntity_Hatch_DataAccess(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 16, new String[]{
         		"Data Access for Multiblocks",
@@ -64,6 +78,8 @@ public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch 
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
         if (aBaseMetaTileEntity.isClientSide()) return true;
         aBaseMetaTileEntity.openGUI(aPlayer);
+        if(isComputerPart)
+            needsUpdate = true;
         return true;
     }
 
@@ -98,9 +114,153 @@ public class GT_MetaTileEntity_Hatch_DataAccess extends GT_MetaTileEntity_Hatch 
     public boolean allowPutStack(IGregTechTileEntity aBaseMetaTileEntity, int aIndex, byte aSide, ItemStack aStack) {
         return false;
     }
+
+    public int getFreeSpace(){
+        if(needsUpdate){
+            formatDataItems();
+            needsUpdate = false;
+        }
+        if(!isComputerPart)
+            return 0;
+        int freeSpace = 0;
+        System.out.println("IS is: "+mInventory.length);
+        for(ItemStack aStack: mInventory){
+            if(aStack==null|| !(ItemList.Tool_DataStick.isStackEqual(aStack,false,true)|| ItemList.Tool_DataOrb.isStackEqual(aStack,false,true)|| ItemList.Tool_DataCluster.isStackEqual(aStack,false,true)))
+                continue;
+            NBTTagCompound tTag = aStack.getTagCompound();
+            if(tTag == null)
+               continue;
+            if(tTag.getBoolean("isLocked"))
+                continue;
+            int size = tTag.getInteger("capacitySize");
+            int usedCapacity = tTag.getInteger("usedCapacity");
+            freeSpace+=(size-usedCapacity);
+        }
+        return freeSpace;
+    }
+
+    public boolean saveRecipeData(Integer aData){
+        if(needsUpdate){
+            formatDataItems();
+            needsUpdate = false;
+        }
+        for(ItemStack aStack: mInventory){
+            int freeSpace = 0;
+            if(aStack==null|| !(ItemList.Tool_DataStick.isStackEqual(aStack,false,true)|| ItemList.Tool_DataOrb.isStackEqual(aStack,false,true)|| ItemList.Tool_DataCluster.isStackEqual(aStack,false,true)))
+                continue;
+            NBTTagCompound tTag = aStack.getTagCompound();
+            if(tTag == null)
+                continue;
+            if(tTag.getBoolean("isLocked"))
+                continue;
+            int size = tTag.getInteger("capacitySize");
+            int usedCapacity = tTag.getInteger("usedCapacity");
+            freeSpace+=(size-usedCapacity);
+            if(freeSpace<=0)
+                continue;
+            GT_Recipe.GT_Recipe_ResearchStation aRecipe = GT_Recipe.GT_Recipe_ResearchStation.mIDtoRecipeMap.get(aData);
+            if(aRecipe == null)
+                return false;
+            tTag.setInteger("rID"+(usedCapacity),aRecipe.mID);
+            tTag.setInteger("usedCapacity",(usedCapacity+1));
+            aStack.setTagCompound(tTag);
+            System.out.println("saved recipe");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addAllToHashSet(HashSet<Integer> aList){
+        if(needsUpdate){
+            formatDataItems();
+            needsUpdate = false;
+        }
+        for(ItemStack aStack: mInventory){
+            if(aStack==null|| !(ItemList.Tool_DataStick.isStackEqual(aStack,false,true)|| ItemList.Tool_DataOrb.isStackEqual(aStack,false,true)|| ItemList.Tool_DataCluster.isStackEqual(aStack,false,true)))
+                continue;
+            NBTTagCompound tTag = aStack.getTagCompound();
+            if(tTag == null)
+                continue;
+            int usedCapacity = tTag.getInteger("usedCapacity");
+            for(int i = 0;i<usedCapacity;i++){
+                int id = tTag.getInteger("rID"+(i));
+                if(id != 0)
+                    aList.add(id);
+            }
+        }
+        return true;
+    }
+
+  /*  public boolean addAllToHashSet(HashSet<String> aSet){
+        if(needsUpdate){
+            formatDataItems();
+            needsUpdate = false;
+        }
+        for(ItemStack aStack: mInventory){
+            if(aStack==null|| !(ItemList.Tool_DataStick.isStackEqual(aStack,false,true)||ItemList.Tool_DataOrb.isStackEqual(aStack,false,true)||ItemList.Tool_DataCluster.isStackEqual(aStack,false,true)))
+                continue;
+            NBTTagCompound tTag = aStack.getTagCompound();
+            if(tTag == null)
+                continue;
+            int size = tTag.getInteger("capacitySize");
+            int usedCapacity = tTag.getInteger("usedCapacity");
+            System.out.println("getting all data "+usedCapacity);
+            for(int i = 0;i<usedCapacity;i++){
+                System.out.println("getting at "+i);
+                String aUnlocalized = tTag.getString("unlocalized"+i);
+                System.out.println("unlocal is  "+ aUnlocalized);
+                if(aUnlocalized==null)
+                    continue;
+                aSet.add(aUnlocalized);
+            }
+        }
+        return true;
+    }*/
+
+    public boolean formatDataItems(){
+        for(ItemStack aStack: mInventory){
+            System.out.println("cleaning dataSticks, can access stack"+(aStack==null|| !ItemList.Tool_DataStick.isStackEqual(aStack,false,true)));
+            if(aStack==null|| !(ItemList.Tool_DataStick.isStackEqual(aStack,false,true)|| ItemList.Tool_DataOrb.isStackEqual(aStack,false,true)|| ItemList.Tool_DataCluster.isStackEqual(aStack,false,true)))
+                continue;
+            NBTTagCompound tTag = aStack.getTagCompound();
+            if(tTag == null)
+                tTag = new NBTTagCompound();
+            if(tTag.getBoolean("isLocked")||tTag.getBoolean("isComputer"))
+                continue;
+            tTag = new NBTTagCompound();
+
+            int size = 0;
+            int usedCapacity = 0;
+
+            if(ItemList.Tool_DataStick.isStackEqual(aStack,false,true)){
+                size = 1;
+            }
+            else if (ItemList.Tool_DataOrb.isStackEqual(aStack,false,true)){
+                size = 4;
+            }
+            else if(ItemList.Tool_DataCluster.isStackEqual(aStack,false,true)){
+                size = 16;
+            }
+
+            tTag.setBoolean("isComputer",true);
+            tTag.setInteger("capacitySize",size);
+            tTag.setInteger("usedCapacity",usedCapacity);
+            aStack.setTagCompound(tTag);
+
+        }
+        return true;
+    }
   
     @Override
     public int getInventoryStackLimit() {
         return 1;
+    }
+
+    @Override
+    public void onCloseGUI() {
+        needsUpdate = true;
+        if(mComputer!=null)
+            mComputer.onDataContainersUpdated();
+        super.onCloseGUI();
     }
 }

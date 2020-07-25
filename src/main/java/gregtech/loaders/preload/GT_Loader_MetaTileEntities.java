@@ -1377,6 +1377,15 @@ public class GT_Loader_MetaTileEntities implements Runnable {
         ItemList.HugeTurbinePlasma.set(new GT_MetaTileEntity_HugeTurbine_Plasma(12198,"multimachine.hugeturbine.plasma", "Huge Plasma Turbine").getStackForm(1L));
 
         ItemList.HugeImplosionCompressor.set(new GT_MetaTileEntity_HugeImplosionCompressor(12199,"multimachine.hugecompressor", "Huge Implosion Compressor").getStackForm(1L));
+
+        ItemList.LargeResearchStation.set(new GT_MetaTileEntity_LargeResearchStation1(12200,"multimachine.researchstation.tier.01","Large research station 1").getStackForm(1L));
+        ItemList.Computer.set(new GT_MetaTileEntity_Computer1(12201,"multimachine.computer.tier.01","Computer 1").getStackForm(1L));
+        ItemList.ComputerTerminal.set(new GT_MetaTileEntity_ComputerTerminal(12202,"basicmachine.computerterminal", "Computer Terminal", 8).getStackForm(1L));
+        ItemList.Hatch_Circuit_Acess.set(new GT_MetaTileEntity_Hatch_CircuitAccess(12203,"hatch.circuity","Circuit access hatch",1).getStackForm(1L));
+        ItemList.Hatch_Data_Input.set(new GT_MetaTileEntity_Hatch_Data(12204,"hatch.data","Data Hatch", 1).getStackForm(1L));
+        GT_OreDictUnificator.registerOre(OrePrefixes.wireGt01, Materials.Aluminium, new GT_MetaPipeEntity_DataCable(12205, aTextWire1 + "aluminium" + ".01", "1x " +"Data" + aTextWire2, 0.4F, Materials.Aluminium, 2, 1000, false).getStackForm(1L));
+        ItemList.DataSystemController.set(new GT_MetaTileEntity_DataSystemController(12206,"machine.datasystemcontroller","Data System Controller",1).getStackForm(1L));
+
     }
 
     private static void run4() {

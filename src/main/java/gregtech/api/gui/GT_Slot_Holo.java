@@ -4,11 +4,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class GT_Slot_Holo extends Slot {
     public final int mSlotIndex;
     public boolean mCanInsertItem, mCanStackItem;
     public int mMaxStacksize = 127;
+    ItemStack mStack;
 
     public GT_Slot_Holo(IInventory par1iInventory, int par2, int par3, int par4, boolean aCanInsertItem, boolean aCanStackItem, int aMaxStacksize) {
         super(par1iInventory, par2, par3, par4);
@@ -16,6 +18,14 @@ public class GT_Slot_Holo extends Slot {
         mCanStackItem = aCanStackItem;
         mMaxStacksize = aMaxStacksize;
         mSlotIndex = par2;
+    }
+    public GT_Slot_Holo(IInventory par1iInventory, int par2, int par3, int par4, boolean aCanInsertItem, boolean aCanStackItem, int aMaxStacksize, ItemStack aDisplayStack) {
+        this(par1iInventory,par2,par3,par4,aCanInsertItem,aCanStackItem,aMaxStacksize);
+        mStack = aDisplayStack;
+    }
+
+    public void setTexrue(ResourceLocation aRexture){
+        texture = aRexture;
     }
 
     @Override
@@ -37,6 +47,13 @@ public class GT_Slot_Holo extends Slot {
     public ItemStack decrStackSize(int par1) {
         if (!mCanStackItem) return null;
         return super.decrStackSize(par1);
+    }
+
+    @Override
+    public ItemStack getStack() {
+        if(mStack==null)
+        return super.getStack();
+        return mStack;
     }
 
     @Override

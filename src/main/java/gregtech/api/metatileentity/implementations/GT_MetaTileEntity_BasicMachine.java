@@ -799,6 +799,9 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         }
         if (tRecipe.mSpecialValue == -200 && (mCleanroom == null || mCleanroom.mEfficiency == 0))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
+        if(tRecipe.mRequireResearch)
+            if(getSpecialSlot()==null||getSpecialSlot().getTagCompound()==null||!findResearchDataInTag(getSpecialSlot().getTagCompound(),tRecipe.mResearchID))
+                return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         if (!tRecipe.isRecipeInputEqual(true, new FluidStack[]{getFillableStack()}, getAllInputs()))
             return FOUND_RECIPE_BUT_DID_NOT_MEET_REQUIREMENTS;
         for (int i = 0; i < mOutputItems.length; i++)
@@ -811,6 +814,15 @@ public abstract class GT_MetaTileEntity_BasicMachine extends GT_MetaTileEntity_B
         mOutputFluid = tRecipe.getFluidOutput(0);
         calculateOverclockedNess(tRecipe);
         return FOUND_AND_SUCCESSFULLY_USED_RECIPE;
+    }
+
+    private boolean findResearchDataInTag(NBTTagCompound aTag, int aID){
+        int tUsedCapacity = aTag.getInteger("usedCapacity");
+        for(int i = 0; i<tUsedCapacity;i++){
+            if(aTag.getInteger("rID"+(i))==aID)
+                return true;
+        }
+        return false;
     }
 
     public ITexture[] getSideFacingActive(byte aColor) {

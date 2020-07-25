@@ -3,6 +3,7 @@ package gregtech.api.net;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
@@ -21,6 +22,15 @@ public class GT_Packet_ExtendedBlockEvent extends GT_Packet {
         mX = aX;
         mY = aY;
         mZ = aZ;
+        mID = aID;
+        mValue = aValue;
+    }
+
+    public GT_Packet_ExtendedBlockEvent(IGregTechTileEntity aTile, int aID, int aValue){
+        super(false);
+        mX = aTile.getXCoord();
+        mY = aTile.getYCoord();
+        mZ = aTile.getZCoord();
         mID = aID;
         mValue = aValue;
     }

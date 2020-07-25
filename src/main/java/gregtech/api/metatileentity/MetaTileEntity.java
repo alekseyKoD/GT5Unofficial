@@ -918,4 +918,9 @@ public abstract class MetaTileEntity implements IMetaTileEntity {
 
     @Override
     public void receiveExtendedBlockEvent(int aID, int aValue) {  }
+
+    @Override
+    public void onAdjacentBlockChange(int aX, int aY, int aZ) {
+
+    }
 }

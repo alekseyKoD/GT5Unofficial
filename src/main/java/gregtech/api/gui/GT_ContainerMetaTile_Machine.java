@@ -3,6 +3,7 @@ package gregtech.api.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.util.GT_LanguageManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -202,5 +203,13 @@ public class GT_ContainerMetaTile_Machine extends GT_Container {
     
     public String trans(String aKey, String aEnglish){
     	return GT_LanguageManager.addStringLocalization("Interaction_DESCRIPTION_Index_"+aKey, aEnglish, false);
+    }
+
+    @Override
+    public void onContainerClosed(EntityPlayer par1EntityPlayer) { // now close GUI will work
+        if( mTileEntity.getMetaTileEntity() instanceof MetaTileEntity){
+            ((MetaTileEntity)mTileEntity.getMetaTileEntity()).onCloseGUI();
+        }
+        super.onContainerClosed(par1EntityPlayer);
     }
 }
