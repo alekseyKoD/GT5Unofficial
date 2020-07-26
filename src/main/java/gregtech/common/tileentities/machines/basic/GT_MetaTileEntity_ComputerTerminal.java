@@ -3,6 +3,7 @@ package gregtech.common.tileentities.machines.basic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.datasystem.*;
+import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -194,8 +195,11 @@ public class GT_MetaTileEntity_ComputerTerminal extends GT_MetaTileEntity_BasicM
     }
 
     public void startResearch(int aID){
-        if(mController == null)
+        if(mController == null) {
+            IGregTechTileEntity tTile = getBaseMetaTileEntity();
+            GT_Values.NW.sendPacketToAllPlayersInRange(tTile.getWorld(), new GT_Packet_ExtendedBlockEvent(tTile, 132, 2), tTile.getXCoord(), tTile.getZCoord());
             return;
+        }
         mController.mSystem.sendInformation(getNode(),mController.mSystem.getPathToController(getNode()),new GT_MessageBundle(1,aID).addSender(getNode()));
     }
 

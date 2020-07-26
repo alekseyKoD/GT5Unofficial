@@ -205,6 +205,13 @@ public class GT_GUIContainer_Research extends GuiContainer implements INEIGuiHan
             y+=10;
             fr.drawString("is available",x,y,aCol);
         }
+        else if(errorState == 2){
+            y-=4;
+            aCol =(200<<16)+(20<<8)+(50)+(255<<24);
+            fr.drawString("Data System",x,y,aCol);
+            y+=10;
+            fr.drawString("is not connected",x,y,aCol);
+        }
         else if(researchState==3) {
             if(mCopyFrom == null){
                 aCol =(200<<16)+(20<<8)+(50)+(255<<24);

@@ -198,7 +198,7 @@ public class GT_MetaTileEntity_DataSystemController extends GT_MetaTileEntity_Ba
     }
 
     public void onSystemChanged(){
-        mUpdate = 50;
+        mUpdate = 80;
     }
 
 
@@ -335,5 +335,11 @@ public class GT_MetaTileEntity_DataSystemController extends GT_MetaTileEntity_Ba
             }
         }
         super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public void onAdjacentBlockChange(int aX, int aY, int aZ) {
+        onSystemChanged();
+
     }
 }

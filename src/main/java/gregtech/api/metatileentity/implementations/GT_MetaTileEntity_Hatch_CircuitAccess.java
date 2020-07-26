@@ -10,6 +10,7 @@ import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.gui.GT_Container_HatchCircuitAccess;
 import gregtech.common.gui.GT_GUIContainer_HatchCircuitAccess;
+import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_ComputerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ public class GT_MetaTileEntity_Hatch_CircuitAccess extends GT_MetaTileEntity_Hat
     int mEnergy = 0;
 
     public boolean needUpdate = false;
+    public GT_MetaTileEntity_ComputerBase mComputer = null;
     public GT_MetaTileEntity_Hatch_CircuitAccess(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 16, new String[]{
                 "Data Access for Multiblocks",
@@ -233,5 +235,12 @@ public class GT_MetaTileEntity_Hatch_CircuitAccess extends GT_MetaTileEntity_Hat
         }
        return new int[]{0,0,0};
 
+    }
+
+    @Override
+    public void onCloseGUI() {
+        if(mComputer!=null)
+            mComputer.onCircuitsUpdated();
+        super.onCloseGUI();
     }
 }

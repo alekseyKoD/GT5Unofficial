@@ -51,6 +51,7 @@ public abstract class GT_MetaTileEntity_ComputerBase extends GT_MetaTileEntity_D
         if (aMetaTileEntity == null) return false;
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_CircuitAccess) {
             ((GT_MetaTileEntity_Hatch_CircuitAccess) aMetaTileEntity).updateStats();
+            ((GT_MetaTileEntity_Hatch_CircuitAccess) aMetaTileEntity).mComputer = this;
             if(mCircuitAccessHatches.contains(aMetaTileEntity))
                 return true;
             ((GT_MetaTileEntity_Hatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
@@ -260,6 +261,10 @@ public abstract class GT_MetaTileEntity_ComputerBase extends GT_MetaTileEntity_D
 
         mSystemController.onDataUnpdated();
 
+    }
+
+    public void onCircuitsUpdated(){
+        mCalculationPower = getCalculationPower();
     }
 
     @Override
