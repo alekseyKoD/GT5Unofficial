@@ -18,12 +18,12 @@ public class GT_ResearchStationRecipeLoader
         implements Runnable {
 
     public void run() {
-        casheRecipes();
+        saveRecipes();
         addIngotRecipes();
         addFieldGensRecipes();
     }
 
-    private void casheRecipes(){
+    private void saveRecipes(){
         CachedRecipes.Invar.findAndSet(
                 new SearchParams(sAlloySmelterRecipes).setOutput(GT_OreDictUnificator.get(OrePrefixes.ingot,Materials.Invar,1))
                 .addInput(Materials.Iron, SearchMode.AND).addInput(Materials.Nickel,SearchMode.AND),
