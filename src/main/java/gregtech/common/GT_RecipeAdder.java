@@ -1,9 +1,6 @@
 package gregtech.common;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import cpw.mods.fml.common.Loader;
 import gregtech.GT_Mod;
@@ -14,6 +11,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.objects.GT_FluidStack;
+import gregtech.api.objects.GT_RecipeComparator;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -1220,9 +1218,23 @@ public class GT_RecipeAdder
             aTargetRecipes[i-1].setResearchID(aID);
             aTargetRecipes[i-1].mSpecialItems = aOrb;
         }
+        ArrayList<GT_Recipe> aRecipes = new ArrayList<>();
+        for(GT_Recipe tRecipe : aTargetRecipes){
+            boolean foundMatch = false;
+            for(GT_Recipe aRecipe : aRecipes){
+                if(GT_Utility.areStacksEqual(aRecipe.mOutputs[0],tRecipe.mOutputs[0])) {
+                    foundMatch = true;
+                    break;
+                }
+            }
+            if(!foundMatch)
+                aRecipes.add(tRecipe);
+        }
+
+        Collections.sort(aRecipes, new GT_RecipeComparator());
 
         GT_Recipe.GT_Recipe_Map.sResearchStationVisualRecipes.addFakeRecipe(false,aInputs,aOutputs,null,aFluidInputsPerIteration,null,aSingleResearchTime,aEUt,aComputation,false);
-        GT_Recipe.GT_Recipe_ResearchStation aRecipe = new GT_Recipe.GT_Recipe_ResearchStation(aID,aResearchItems,aSingleResearchTime,aInputsPerIteration,aFluidInputsPerIteration, aComputation, aEUt,aTargetRecipes,aMinIterationsCount,aMaxIterationsCount,new GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription(aDisplayStack,aResearchPage,aRecipeCoords[0], aRecipeCoords[1], new String[]{aName},aRecipePageText, aDependencies));
+        GT_Recipe.GT_Recipe_ResearchStation aRecipe = new GT_Recipe.GT_Recipe_ResearchStation(aID,aResearchItems,aSingleResearchTime,aInputsPerIteration,aFluidInputsPerIteration, aComputation, aEUt,aRecipes.toArray(new GT_Recipe[aRecipes.size()]),aMinIterationsCount,aMaxIterationsCount,new GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription(aDisplayStack,aResearchPage,aRecipeCoords[0], aRecipeCoords[1], new String[]{aName},aRecipePageText, aDependencies));
         GT_Recipe.GT_Recipe_ResearchStation.addBaseRecipe(aRecipe);
         return aRecipe.mDescription;
     }

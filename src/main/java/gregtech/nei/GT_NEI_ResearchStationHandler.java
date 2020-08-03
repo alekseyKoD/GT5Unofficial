@@ -436,12 +436,13 @@ public class GT_NEI_ResearchStationHandler
                 }
             }
             if(stacks!=null)
-                for(GT_ItemStack is : stacks)
-                    tDisplayStacks.add(is.toStack());
+                for(GT_ItemStack is : stacks) {
+                    ItemStack s = is.toStack();
+                    tDisplayStacks.add(s);
+                }
+            for(ItemStack is : tDisplayStacks)
+                is.stackSize = 1;
             this.items = ((ItemStack[]) tDisplayStacks.toArray(new ItemStack[0]));
-            if (this.items.length == 0) {
-                this.items = new ItemStack[]{new ItemStack(Blocks.fire)};
-            }
             this.permutated = true;
             setPermutationToRender(0);
         }

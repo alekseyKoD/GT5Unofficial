@@ -95,7 +95,7 @@ public class GT_Mod implements IGT_Mod {
         GT_Values.GT = this;
         GT_Values.DW = new GT_DummyWorld();
         GT_Values.NW = new GT_Network();
-        GT_Values.S = new GT_ResearchCreator();
+        GT_Values.S = new GT_ResearchConstructor();
         GregTech_API.sRecipeAdder = GT_Values.RA = new GT_RecipeAdder();
 
         Textures.BlockIcons.VOID.name();

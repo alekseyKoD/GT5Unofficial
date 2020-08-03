@@ -3,7 +3,7 @@ package gregtech.api.enums;
 import gregtech.api.interfaces.internal.IGT_Mod;
 import gregtech.api.interfaces.internal.IGT_RecipeAdder;
 import gregtech.api.net.IGT_NetworkHandler;
-import gregtech.api.util.GT_ResearchCreator;
+import gregtech.api.util.GT_ResearchConstructor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -116,5 +116,5 @@ public class GT_Values {
     /**
      * Interface to setup researches
      */
-    public static GT_ResearchCreator S;
+    public static GT_ResearchConstructor S;
 }

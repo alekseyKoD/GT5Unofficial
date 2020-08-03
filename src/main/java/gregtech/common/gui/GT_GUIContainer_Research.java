@@ -7,6 +7,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.net.GT_Packet_StartResearch;
 import gregtech.api.util.GT_Recipe.GT_Recipe_ResearchStation;
+import gregtech.api.util.GT_Utility;
 import gregtech.common.tileentities.machines.basic.GT_MetaTileEntity_ComputerTerminal;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_ComputerBase;
 import net.minecraft.client.Minecraft;
@@ -64,7 +65,9 @@ public class GT_GUIContainer_Research extends GuiContainer implements INEIGuiHan
         GT_Container_Research.GT_SlotDefinition[] aOut = new GT_Container_Research.GT_SlotDefinition[aRecipe.mTargetRecipes.length+1];
         aOut[0] = new GT_Container_Research.GT_SlotDefinition(aRecipe.mDataOrb,152,-20);
         for(int i = 1; i < aRecipe.mTargetRecipes.length+1; i++){
-            aOut[i] = new GT_Container_Research.GT_SlotDefinition(aRecipe.mTargetRecipes[i-1].mOutputs[0], -60+18*(i-1),170);
+            ItemStack is = aRecipe.mTargetRecipes[i-1].mOutputs[0].copy();
+            is.stackSize = 1;
+            aOut[i] = new GT_Container_Research.GT_SlotDefinition(is, -60+18*(i-1),170);
         }
         return aOut;
     }
