@@ -20,6 +20,7 @@ public class GT_ResearchConstructor {
     ItemStack mDisplay = null;
     String[] mDescription = null;
     ArrayList<GT_Recipe> mTargetRecipes = new ArrayList<>();
+    boolean mFluidResearch = false;
     GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription[] mDependencies = null;
 
     public GT_ResearchConstructor newResearch(int aID){
@@ -99,9 +100,14 @@ public class GT_ResearchConstructor {
         return this;
     }
 
+    public GT_ResearchConstructor setFluidResearch(){
+        mFluidResearch = true;
+        return this;
+    }
+
     public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addResearch(){
         GT_Recipe[] aRecipes = mTargetRecipes.toArray(new GT_Recipe[mTargetRecipes.size()]);
-        return RA.addElectricResearchStationRecipe(mID,mScans,mTime,mInputs,mFInputs,mComp,mEu,aRecipes,mMinIt,mMaxIt,mPage,mDisplay,mName,mDescription,mCoods,mDependencies);
+        return RA.addElectricResearchStationRecipe(mID,mScans,mTime,mInputs,mFInputs,mComp,mEu,aRecipes,mMinIt,mMaxIt,mPage,mDisplay,mName,mDescription,mCoods,mFluidResearch,mDependencies);
     }
 
     //utils

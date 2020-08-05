@@ -65,7 +65,11 @@ public class GT_GUIContainer_Research extends GuiContainer implements INEIGuiHan
         GT_Container_Research.GT_SlotDefinition[] aOut = new GT_Container_Research.GT_SlotDefinition[aRecipe.mTargetRecipes.length+1];
         aOut[0] = new GT_Container_Research.GT_SlotDefinition(aRecipe.mDataOrb,152,-20);
         for(int i = 1; i < aRecipe.mTargetRecipes.length+1; i++){
-            ItemStack is = aRecipe.mTargetRecipes[i-1].mOutputs[0].copy();
+            ItemStack is;
+            if(!aRecipe.isFluidResearch)
+                is = aRecipe.mTargetRecipes[i-1].mOutputs[0].copy();
+            else
+                is = GT_Utility.getFluidDisplayStack(aRecipe.mTargetRecipes[i-1].mFluidOutputs[0], false);
             is.stackSize = 1;
             aOut[i] = new GT_Container_Research.GT_SlotDefinition(is, -60+18*(i-1),170);
         }

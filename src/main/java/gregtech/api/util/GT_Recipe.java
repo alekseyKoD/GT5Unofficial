@@ -548,10 +548,11 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
         public int mMinIterationsCount;
         public int mMaxIterationsCount;
         public ItemStack mDataOrb;
+        public boolean isFluidResearch;
         public GT_ResearchDescription mDescription;
 
 
-        public GT_Recipe_ResearchStation(int aID, ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe[] aTargetRecipes, int aMinIterationsCount, int aMaxIterationsCount, GT_ResearchDescription aDescription) {
+        public GT_Recipe_ResearchStation(int aID, ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe[] aTargetRecipes, int aMinIterationsCount, int aMaxIterationsCount, boolean aIsFluidResearch, GT_ResearchDescription aDescription) {
             if(mIDtoRecipeMap.get(aID)!=null)
                 throw new IllegalArgumentException("Research ID "+aID+" is already taken");
             mDescription = aDescription;
@@ -572,7 +573,7 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
             if(mEUt == -1)
                 return;
-
+            isFluidResearch = aIsFluidResearch;
             mRecipeToIDsMap.put(this,curentlyFreeID);
             // mIDtoRecipeMap.put(curentlyFreeID,this);
             curentlyFreeID++;

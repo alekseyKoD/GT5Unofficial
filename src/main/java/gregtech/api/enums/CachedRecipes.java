@@ -5,19 +5,20 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 import scala.actors.threadpool.Arrays;
 
 import java.util.*;
 
 public enum CachedRecipes {
     fieldGenLV, fieldGenMV, fieldGenHV, fieldGenEV, fieldGenIV,
-    Invar;
+    Invar, Polyethylene;
 
     private ArrayList<GT_Recipe> mRecipes = new ArrayList<>();
 
     public GT_Recipe[] get(){
         if(mRecipes.size() == 0)
-            throw new IllegalAccessError("The Enum '" + name() + "' has not been set to a Recipe at this time!");
+            throw new IllegalAccessError("The Enum '" + name() + "' is empty or has not been set to the Recipe in time!");
         return mRecipes.toArray(new GT_Recipe[mRecipes.size()]);
     }
 
@@ -36,6 +37,18 @@ public enum CachedRecipes {
 
     public void findAndSet(SearchParams aParams){
         HashSet<GT_Recipe> tResult = new HashSet<>();
+        if(aParams.mOutputF!=null){
+            for(GT_Recipe tRecipe : aParams.mMap.mRecipeList){
+                if(tRecipe.mFluidOutputs != null && tRecipe.mFluidOutputs.length > 0){
+                    if(GT_Utility.areFluidsEqual(aParams.mOutputF,tRecipe.mFluidOutputs[0],true)){
+                        tResult.add(tRecipe);
+                    }
+                }
+            }
+            mRecipes.addAll(tResult);
+            return;
+        }
+
         ArrayList<ItemStack> tOutputs = new ArrayList<>();
         if(aParams.mOutput == null){
             for(OrePrefixes tPrefix : aParams.mOutputPrefixes){
@@ -125,6 +138,7 @@ public enum CachedRecipes {
         Materials mOutputMaterial;
         ArrayList<OrePrefixes> mOutputPrefixes = new ArrayList<>();
         ItemStack mOutput = null;
+        FluidStack mOutputF = null;
         ArrayList<Object> mInputParams = new ArrayList<>();
 
         public static HashMap<GT_Recipe.GT_Recipe_Map, List<GT_Recipe>> mSortedMaps = new HashMap<>(30);
@@ -153,6 +167,11 @@ public enum CachedRecipes {
 
         public SearchParams setOutput(ItemStack aStack){
             mOutput = aStack;
+            return this;
+        }
+
+        public SearchParams setOutput(FluidStack aFluid){
+            mOutputF = aFluid;
             return this;
         }
 

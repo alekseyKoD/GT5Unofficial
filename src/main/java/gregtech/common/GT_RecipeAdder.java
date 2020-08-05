@@ -1195,7 +1195,7 @@ public class GT_RecipeAdder
     }*/
 
     @Override//27
-    public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID,ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe[] aTargetRecipes, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String aName, String[] aRecipePageText, int[] aRecipeCoords, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies){
+    public GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription addElectricResearchStationRecipe(int aID,ItemStack[] aResearchItems, int aSingleResearchTime, ItemStack[] aInputsPerIteration, FluidStack[] aFluidInputsPerIteration, int aComputation, int aEUt, GT_Recipe[] aTargetRecipes, int aMinIterationsCount, int aMaxIterationsCount, int aResearchPage, ItemStack aDisplayStack, String aName, String[] aRecipePageText, int[] aRecipeCoords, boolean isFluidResearch, GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription... aDependencies){
         ItemStack[] aInputs = new ItemStack[18];
         for(int i = 0; i < aResearchItems.length;i++){
             aInputs[14+i] = aResearchItems[i];
@@ -1214,7 +1214,10 @@ public class GT_RecipeAdder
         aOrb.setTagCompound(aTag);
         aOutputs[0] = aOrb;
         for(int i = 1; i < aOutputs.length; i++) {
-            aOutputs[i] = aTargetRecipes[i-1].mOutputs[0];
+            if(isFluidResearch)
+                aOutputs[i] = GT_Utility.getFluidDisplayStack(aTargetRecipes[i-1].mFluidOutputs[0],false);
+            else
+                aOutputs[i] = aTargetRecipes[i-1].mOutputs[0];
             aTargetRecipes[i-1].setResearchID(aID);
             aTargetRecipes[i-1].mSpecialItems = aOrb;
         }
@@ -1222,9 +1225,17 @@ public class GT_RecipeAdder
         for(GT_Recipe tRecipe : aTargetRecipes){
             boolean foundMatch = false;
             for(GT_Recipe aRecipe : aRecipes){
-                if(GT_Utility.areStacksEqual(aRecipe.mOutputs[0],tRecipe.mOutputs[0])) {
-                    foundMatch = true;
-                    break;
+                if(!isFluidResearch) {
+                    if (GT_Utility.areStacksEqual(aRecipe.mOutputs[0], tRecipe.mOutputs[0])) {
+                        foundMatch = true;
+                        break;
+                    }
+                }
+                else {
+                    if (GT_Utility.areFluidsEqual(aRecipe.mFluidOutputs[0], tRecipe.mFluidOutputs[0], true)) {
+                        foundMatch = true;
+                        break;
+                    }
                 }
             }
             if(!foundMatch)
@@ -1234,7 +1245,7 @@ public class GT_RecipeAdder
         Collections.sort(aRecipes, new GT_RecipeComparator());
 
         GT_Recipe.GT_Recipe_Map.sResearchStationVisualRecipes.addFakeRecipe(false,aInputs,aOutputs,null,aFluidInputsPerIteration,null,aSingleResearchTime,aEUt,aComputation,false);
-        GT_Recipe.GT_Recipe_ResearchStation aRecipe = new GT_Recipe.GT_Recipe_ResearchStation(aID,aResearchItems,aSingleResearchTime,aInputsPerIteration,aFluidInputsPerIteration, aComputation, aEUt,aRecipes.toArray(new GT_Recipe[aRecipes.size()]),aMinIterationsCount,aMaxIterationsCount,new GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription(aDisplayStack,aResearchPage,aRecipeCoords[0], aRecipeCoords[1], new String[]{aName},aRecipePageText, aDependencies));
+        GT_Recipe.GT_Recipe_ResearchStation aRecipe = new GT_Recipe.GT_Recipe_ResearchStation(aID,aResearchItems,aSingleResearchTime,aInputsPerIteration,aFluidInputsPerIteration, aComputation, aEUt,aRecipes.toArray(new GT_Recipe[aRecipes.size()]),aMinIterationsCount,aMaxIterationsCount, isFluidResearch,new GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription(aDisplayStack,aResearchPage,aRecipeCoords[0], aRecipeCoords[1], new String[]{aName},aRecipePageText, aDependencies));
         GT_Recipe.GT_Recipe_ResearchStation.addBaseRecipe(aRecipe);
         return aRecipe.mDescription;
     }

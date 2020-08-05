@@ -2446,7 +2446,7 @@ if(Loader.isModLoaded("Railcraft")){
                 10,10,1,ItemList.SimpleFluidFilter.get(1),
                 "simple filter",
                 new String[]{"cool page text"},
-                new int[]{50,50},null);
+                new int[]{50,50}, false,null);
         GT_Values.RA.addMixerRecipe(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quicklime, 1L), GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Stone, 3L), GT_Values.NI, GT_Values.NI, GT_ModHandler.getDistilledWater(500L), Materials.Concrete.getMolten(576L), GT_Values.NI, 20, 16);
 
         GT_Values.RA.addAssemblerRecipe(new ItemStack[]{GT_OreDictUnificator.get(OrePrefixes.pipeSmall, Materials.Plastic,1),GT_ModHandler.getIC2Item("carbonFiber", 8), ItemList.Circuit_Parts_GlassFiber.get(32)},null,ItemList.FluidFilterItem.get(4),80,48);
@@ -2457,14 +2457,13 @@ if(Loader.isModLoaded("Railcraft")){
                 20,40,1,ItemList.FluidFilterItem.get(1),
                 "advanced filter",
                 new String[]{"cool page text"},
-                new int[]{100,50},new GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription[]{d});
+                new int[]{100,50},false,new GT_Recipe.GT_Recipe_ResearchStation.GT_ResearchDescription[]{d});
 
         if (GregTech_API.sThaumcraftCompat != null) {
             String tKey = "GT_WOOD_TO_CHARCOAL";
             GT_LanguageManager.addStringLocalization(aTextTCGTPage + tKey, "You have discovered a way of making charcoal magically instead of using regular ovens for this purpose.<BR><BR>To create charcoal from wood you first need an air-free environment, some vacuus essentia is needed for that, then you need to incinerate the wood using ignis essentia and wait until all the water inside the wood is burned away.<BR><BR>This method however doesn't create creosote oil as byproduct.");
 
             GregTech_API.sThaumcraftCompat.addResearch(tKey, "Charcoal Transmutation", "Turning wood into charcoal", new String[]{"ALUMENTUM"}, "ALCHEMY", GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Charcoal, 1L), 2, 0, 13, 5, Arrays.asList(new TC_Aspects.TC_AspectStack[]{new TC_Aspects.TC_AspectStack(TC_Aspects.ARBOR, 10L), new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 8L), new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 8L)}), null, new Object[]{aTextTCGTPage + tKey, GregTech_API.sThaumcraftCompat.addCrucibleRecipe(tKey, OrePrefixes.log.get(Materials.Wood), GT_OreDictUnificator.get(OrePrefixes.gem, Materials.Charcoal, 1L), Arrays.asList(new TC_Aspects.TC_AspectStack[]{new TC_Aspects.TC_AspectStack(TC_Aspects.VACUOS, 2L), new TC_Aspects.TC_AspectStack(TC_Aspects.IGNIS, 1L)}))});
-
             tKey = "GT_FILL_WATER_BUCKET";
             GT_LanguageManager.addStringLocalization(aTextTCGTPage + tKey, "You have discovered a way of filling a bucket with aqua essentia in order to simply get water.");
             GregTech_API.sThaumcraftCompat.addResearch(tKey, "Water Transmutation", "Filling buckets with water", null, "ALCHEMY", GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Water, 1L), 2, 0, 16, 5, Arrays.asList(new TC_Aspects.TC_AspectStack[]{new TC_Aspects.TC_AspectStack(TC_Aspects.PERMUTATIO, 4L), new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)}), null, new Object[]{aTextTCGTPage + tKey, GregTech_API.sThaumcraftCompat.addCrucibleRecipe(tKey, GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Empty, 1L), GT_OreDictUnificator.get(OrePrefixes.bucket, Materials.Water, 1L), Arrays.asList(new TC_Aspects.TC_AspectStack[]{new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)})), GregTech_API.sThaumcraftCompat.addCrucibleRecipe(tKey, GT_OreDictUnificator.get(OrePrefixes.capsule, Materials.Empty, 1L), GT_OreDictUnificator.get(OrePrefixes.capsule, Materials.Water, 1L), Arrays.asList(new TC_Aspects.TC_AspectStack[]{new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)})), GregTech_API.sThaumcraftCompat.addCrucibleRecipe(tKey, GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Empty, 1L), GT_OreDictUnificator.get(OrePrefixes.cell, Materials.Water, 1L), Arrays.asList(new TC_Aspects.TC_AspectStack[]{new TC_Aspects.TC_AspectStack(TC_Aspects.AQUA, 4L)}))});
